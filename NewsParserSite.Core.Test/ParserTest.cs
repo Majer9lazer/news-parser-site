@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Xml.XPath;
 using HtmlAgilityPack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NewsParserSite.Core.Implementation;
 using NewsParserSite.Core.Interfaces;
 using NewsParserSite.DATA.Entities;
 

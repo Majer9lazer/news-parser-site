@@ -57,7 +57,7 @@
     <Compile Include="Interfaces\INewsRepository.cs" />
     <Compile Include="Interfaces\IParser.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
-    <Compile Include="Parser.cs" />
+    <Compile Include="Implementation\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
