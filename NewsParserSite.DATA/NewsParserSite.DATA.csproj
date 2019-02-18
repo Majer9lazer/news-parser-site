@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Sql_Scripts\DatabaseCreateWithData\12.sql" />
     <Content Include="Sql_Scripts\DatabaseCreateWithData\NewsParserDb.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

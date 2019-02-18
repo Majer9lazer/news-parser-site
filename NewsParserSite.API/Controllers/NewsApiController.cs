@@ -12,6 +12,7 @@ using NewsParserSite.DATA.Entities;
 
 namespace NewsParserSite.API.Controllers
 {
+    [Authorize]
     public class NewsApiController : ApiController
     {
 
