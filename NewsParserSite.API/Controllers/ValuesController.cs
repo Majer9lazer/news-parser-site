@@ -36,7 +36,12 @@ namespace NewsParserSite.API.Controllers
         public void Post([FromBody]string value)
         {
         }
-
+        [HttpPost]
+        [Route("api/values/getinputparameter")]
+        public string GetInputParamter(string val)
+        {
+            return string.Format("input value = {0}",val);
+        }
         // PUT api/values/5
         public void Put(int id, [FromBody]string value)
         {

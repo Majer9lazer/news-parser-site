@@ -104,6 +104,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\NewsApiControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
     <Compile Include="Controllers\ValuesControllerTest.cs" />
@@ -118,6 +119,10 @@
     <ProjectReference Include="..\NewsParserSite.API\NewsParserSite.API.csproj">
       <Project>{71C00729-8D30-408E-9041-CC5C72F74E0C}</Project>
       <Name>NewsParserSite.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NewsParserSite.Core\NewsParserSite.Core.csproj">
+      <Project>{9B4582E1-A55D-4C91-B3FD-37DEB1682374}</Project>
+      <Name>NewsParserSite.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\NewsParserSite.DATA\NewsParserSite.DATA.csproj">
       <Project>{F34FE859-E151-44DA-9DD1-D86BDF763EDF}</Project>

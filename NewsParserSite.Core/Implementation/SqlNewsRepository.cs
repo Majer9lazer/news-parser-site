@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NewsParserSite.Core.Interfaces;
 using NewsParserSite.DATA.Entities;
@@ -75,18 +76,28 @@ namespace NewsParserSite.Core.Implementation
             return _db.News.Where(w => w.DateOfPublish >= from && w.DateOfPublish <= to).ToList();
         }
 
-        public Dictionary<string, int> GetTopTenWordsInNews()
+        public Dictionary<string, string> GetTopTenWordsInNews()
         {
             StringBuilder builder = new StringBuilder();
-            var result2 = GetAll().Select(s => s.Description);
+            var result2 = GetAll().Select(s => s.Description).ToList();
             foreach (string s in result2)
-            {
                 builder.AppendLine(s);
-            }
 
             string bigText = builder.ToString();
+
+            // сначала разбиваем на слова по пробелам
+            // делаем фильтрацию чтобы исключить предлоги, союзы и т.д.
+            // сортируем по убыванию
+            // берем первые 10 записей 
+            // превращаем в Dictionary чтобы выглядело как - "привет - 3"
+
             var result = bigText.Split(' ')
-                .GroupBy(g => g).OrderByDescending(d => d.Count()).ToDictionary(d => d.Key, c => c.Count());
+                .Where(w => w.Length > 2&& !Regex.IsMatch(w, "[\r\n|\r|\n]"))
+                .GroupBy(g => g)
+                .OrderByDescending(d => d.Count())
+                .Take(10)
+                .ToDictionary(d => d.Key, c => c.Count().ToString());
+
             return result;
         }
 

@@ -12,9 +12,8 @@ namespace NewsParserSite.Core.Interfaces
     {
         List<News> GetNewsByDateRange(DateTime from, DateTime to);
 
-        Dictionary<string, int> GetTopTenWordsInNews();
+        Dictionary<string, string> GetTopTenWordsInNews();
         List<News> SearchByText(string name);
         void AddRange(List<News> list);
-
     }
 }   

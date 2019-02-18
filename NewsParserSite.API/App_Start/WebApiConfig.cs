@@ -4,7 +4,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
+using NewsParserSite.API.Utils;
+using NewsParserSite.Core.Implementation;
+using NewsParserSite.Core.Interfaces;
 using Newtonsoft.Json.Serialization;
+using Unity;
+using Unity.Lifetime;
 
 namespace NewsParserSite.API
 {
@@ -25,6 +30,8 @@ namespace NewsParserSite.API
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+           
         }
     }
 }

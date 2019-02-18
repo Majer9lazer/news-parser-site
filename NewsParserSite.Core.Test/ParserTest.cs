@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Policy;
 using System.Windows.Forms;
@@ -37,6 +38,29 @@ namespace NewsParserSite.Core.Test
             }).ToList();
             Assert.IsNotNull(test);
             Assert.IsTrue(test.Count > 2);
+        }
+
+        [TestMethod]
+        public void ParsePagesToNewsTest()
+        {
+            var results = _parser.ParsePagesToNews(10);
+
+            Assert.IsNotNull(results);
+        }
+
+        [TestMethod]
+        public void BulkInsertTest()
+        {
+            try
+            {
+                Debug.WriteLine("Started...");
+                _parser.BulkInsertRange(10);
+                Debug.WriteLine("Success");
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.ToString());
+            }
         }
     }
 

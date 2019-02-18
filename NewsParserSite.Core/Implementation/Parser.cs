@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 using NewsParserSite.Core.Interfaces;
 using NewsParserSite.DATA.Entities;
@@ -9,7 +11,9 @@ namespace NewsParserSite.Core.Implementation
 {
     public class Parser : IParser
     {
-        public const string SiteUrl = "https://almaty.aqparat.info";
+        public static string SiteUrl = "https://almaty.aqparat.info";
+        private static string SubCityUrl = "/city/36870-almaty/page-";
+        private static int StartPage = 2;
         public const string MainXPathToFeedsBlock = "//div[@class='hfeed']";
         public const string MainXPathToArticlesBlock = "//article[@class='hentry entry xfolkentry gradient']";
         public const string SubXpathToTheme = "/header/h2/a";
@@ -22,6 +26,7 @@ namespace NewsParserSite.Core.Implementation
         {
             _repository = new SqlNewsRepository();
         }
+
         public void Run()
         {
             var document = this.GetDocument();
@@ -51,5 +56,62 @@ namespace NewsParserSite.Core.Implementation
             return web.Load(SiteUrl);
         }
 
+        public List<News> ParsePagesToNews(int to)
+        {
+
+            var bag = new ConcurrentBag<List<News>>();
+            var result = new ConcurrentBag<News>();
+            Parallel.For(StartPage, to, (i) =>
+            {
+                string url = SiteUrl + SubCityUrl + i + ".html";
+                var doc = this.GetDocumentByUrl(url);
+
+                var res = new ConcurrentBag<News>(this.ConvertToNews(doc));
+                Parallel.ForEach(res, (item) =>
+                {
+                    result.Add(item);
+                });
+            });
+
+            return result.ToList();
+
+        }
+
+        public HtmlDocument GetDocumentByUrl(string url)
+        {
+            HtmlWeb web = new HtmlWeb();
+            return web.Load(url);
+        }
+
+        public void BulkInsertRange(int to)
+        {
+            _repository.AddRange(ParsePagesToNews(to));
+            _repository.Save();
+        }
+
+        public List<News> ParsePagesToNews(int @from, int to)
+        {
+            var bag = new ConcurrentBag<List<News>>();
+            var result = new ConcurrentBag<News>();
+            Parallel.For(from, to, (i) =>
+            {
+                string url = SiteUrl + SubCityUrl + i + ".html";
+                var doc = this.GetDocumentByUrl(url);
+
+                var res = new ConcurrentBag<News>(this.ConvertToNews(doc));
+                Parallel.ForEach(res, (item) =>
+                {
+                    result.Add(item);
+                });
+            });
+
+            return result.ToList();
+        }
+
+        public void BulkInsertRange(int @from, int to)
+        {
+            _repository.AddRange(ParsePagesToNews(from, to));
+            _repository.Save();
+        }
     }
 }
