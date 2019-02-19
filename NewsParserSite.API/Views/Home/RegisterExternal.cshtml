@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row" style="margin-top: 20px;">
         @Html.AntiForgeryToken()
-        <div class="form-horizontal col-md-12">
+        <div class="form-horizontal col-md-6">
             <div class="form-group">
                 <label class="col-md-2 control-label" for="email">Введите email</label>
                 <div class="col-md-10">
@@ -26,11 +26,27 @@
                     <input type="password" class="form-control" id="confirmpassword" />
                 </div>
             </div>
-
-            <input type="submit" class="btn btn-primary" id="submit" value="Регистрация" />
+            <div class="form-group">
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary" id="submit">
+                        Регистрация
+                    </button>
+                    <h3>
+                        <a href="@Url.Action("Login","Home")" class="label label-primary">
+                            Войти
+                        </a>
+                    </h3>
+                </div>
+            </div>
         </div>
     </div>
 
+    <div class="alert alert-info alert-dismissible" id="infoMessageBlock" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <span id="infoMessageText">
+            Try to register
+        </span>
+    </div>
 </div>
 
 @section scripts{
@@ -38,11 +54,18 @@
         $(function () {
             $('#submit').click(function (e) {
                 e.preventDefault();
+                replaceClassById("#infoMessageBlock", "alert-info", "alert-success");
+                $("#infoMessageText").text("Test");
                 var data = {
                     Email: $('#email').val(),
                     Password: $('#password').val(),
                     ConfirmPassword: $('#confirmpassword').val()
                 };
+                tryToRegister(data);
+
+            });
+
+            function tryToRegister(data) {
 
                 $.ajax({
                     type: 'POST',
@@ -50,13 +73,22 @@
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(data)
                 }).done(function (data) {
-                    alert("Регистрация пройдена");
+                    if ($('#infoMessageBlock').hasClass('alert-danger')) {
+                        replaceClassById("#infoMessageBlock", "alert-danger", "alert-success");
+                    }
+                    replaceClassById("#infoMessageBlock", "alert-info", "alert-success");
+                    $("#infoMessageText").text(data);
                     console.log(data);
                 }).fail(function (data) {
-                    alert("В процесе регистрации возникла ошибка");
+                    replaceClassById("#infoMessageBlock", "alert-info", "alert-success");
                     console.log(data);
                 });
-            });
+            }
+
+            function replaceClassById(elementId, sourceName, expectedName) {
+                $(elementId).removeClass(sourceName);
+                $(elementId).addClass(expectedName);
+            }
         })
     </script>
 }
