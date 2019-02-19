@@ -19,6 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsParserSite.Core.Test", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configuration", "configuration", "{F34138B1-803B-4B4C-8DFC-03063983D15D}"
 	ProjectSection(SolutionItems) = preProject
+		NewsParserSite.Core.Test\appConString.config = NewsParserSite.Core.Test\appConString.config
 		ConnectionString.config = ConnectionString.config
 	EndProjectSection
 EndProject
