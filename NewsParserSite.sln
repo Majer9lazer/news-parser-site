@@ -17,6 +17,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsParserSite.Core", "News
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsParserSite.Core.Test", "NewsParserSite.Core.Test\NewsParserSite.Core.Test.csproj", "{3B6F029C-3542-4C34-ABD4-C6276ACC8267}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configuration", "configuration", "{F34138B1-803B-4B4C-8DFC-03063983D15D}"
+	ProjectSection(SolutionItems) = preProject
+		ConnectionString.config = ConnectionString.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

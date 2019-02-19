@@ -10,14 +10,14 @@
     <h3>Вход на сайт</h3>
     <hr />
     <div class="row">
-        <div class="form-horizontal col-md-6">
+        <form class="form-horizontal col-md-6">
 
             <div class="form-group">
                 <div class="col-md-2">
                     <label class="control-label" for="userLogin">Логин/Email</label>
                 </div>
                 <div class="col-md-10">
-                    <input class="form-control" id="userLogin" type="email" v-model="userLogin" placeholder="doggyStyle@example.com" />
+                    <input class="form-control" id="userLogin" type="email" autocomplete="user-login" v-model="userLogin" placeholder="doggyStyle@example.com" />
                 </div>
             </div>
             <div class="form-group">
@@ -25,7 +25,7 @@
                     <label class="control-label" for="userPassword">Пароль</label>
                 </div>
                 <div class="col-md-10">
-                    <input class="form-control" id="userPassword" v-model="userPassword" type="password" placeholder="1Example.test" />
+                    <input class="form-control" id="userPassword" v-model="userPassword" autocomplete="user-password" type="password" placeholder="1Example.test" />
                 </div>
             </div>
             <div class="form-group">
@@ -38,7 +38,7 @@
                     </button>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 
     <div class="alert alert-dismissible" v-show="!waitingForProcess" v-bind:class="alertClass" role="alert">
@@ -79,9 +79,8 @@
             },
             methods: {
                 signIn: function () {
-                    formVue.waitingForProcess = true;
+                    this.waitingForProcess = true;
                     $.ajax({
-
                         type: 'POST',
                         url: '/Token',
                         data: {
@@ -100,8 +99,10 @@
                         formVue.alertClass = 'alert-danger';
                         formVue.messageInfo = data.statusText;
                         console.log(data);
+                    }).always(function () {
+                        formVue.waitingForProcess = false;
+
                     });
-                    formVue.waitingForProcess = false;
                 },
                 logout: function () {
                     sessionStorage.removeItem(this.tokenKey);

@@ -83,12 +83,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="appConString.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Sql_Scripts\DatabaseCreateWithData\12.sql" />
-    <Content Include="Sql_Scripts\DatabaseCreateWithData\NewsParserDb.sql" />
+    <Content Include="Sql_Scripts\DatabaseCreateWithData\DbInit.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

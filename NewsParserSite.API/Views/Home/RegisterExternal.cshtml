@@ -6,24 +6,24 @@
 <div class="container">
     <div class="row" style="margin-top: 20px;">
         @Html.AntiForgeryToken()
-        <div class="form-horizontal col-md-6">
+        <form class="form-horizontal col-md-6">
             <div class="form-group">
                 <label class="col-md-2 control-label" for="email">Введите email</label>
                 <div class="col-md-10">
-                    <input type="email" class="form-control" id="email" />
+                    <input type="email" class="form-control" id="email" autocomplete="user-email" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="password" class="col-md-2 control-label">Введите пароль</label>
                 <div class="col-md-10">
-                    <input type="password" class="form-control" id="password" />
+                    <input type="password" class="form-control" autocomplete="current-password" id="password" />
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="confirmpassword" class="col-md-2 control-label">Подтвердите пароль</label>
                 <div class="col-md-10">
-                    <input type="password" class="form-control" id="confirmpassword" />
+                    <input type="password" class="form-control" autocomplete="confirm-current-password" id="confirmpassword" />
                 </div>
             </div>
             <div class="form-group">
@@ -38,7 +38,7 @@
                     </h3>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 
     <div class="alert alert-info alert-dismissible" id="infoMessageBlock" role="alert">
@@ -55,7 +55,6 @@
             $('#submit').click(function (e) {
                 e.preventDefault();
                 replaceClassById("#infoMessageBlock", "alert-info", "alert-success");
-                $("#infoMessageText").text("Test");
                 var data = {
                     Email: $('#email').val(),
                     Password: $('#password').val(),
@@ -79,9 +78,11 @@
                     replaceClassById("#infoMessageBlock", "alert-info", "alert-success");
                     $("#infoMessageText").text(data);
                     console.log(data);
-                }).fail(function (data) {
-                    replaceClassById("#infoMessageBlock", "alert-info", "alert-success");
-                    console.log(data);
+                }).fail(function (error) {
+                    console.log(error);
+                    console.log(error.responseJSON.ModelState.model);
+                    replaceClassById("#infoMessageBlock", "alert-info", "alert-danger");
+                    $('#infoMessageText').text(error.responseJSON.Message + '\n');
                 });
             }
 

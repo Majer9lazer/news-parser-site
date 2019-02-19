@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Configuration;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NewsParserSite.Core.Implementation;
 using NewsParserSite.Core.Interfaces;
 
@@ -26,6 +27,8 @@ namespace NewsParserSite.Core.Test
         [TestMethod]
         public void GetAllTest()
         {
+            var settings =
+                ConfigurationManager.GetSection("connectionStrings");
             var result = _repo.GetAll();
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Count > 0);
