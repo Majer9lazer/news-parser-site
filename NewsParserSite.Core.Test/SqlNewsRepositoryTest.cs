@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NewsParserSite.Core.Implementation;
 using NewsParserSite.Core.Interfaces;
@@ -31,7 +32,7 @@ namespace NewsParserSite.Core.Test
         {
             var result = _repo.GetAll();
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.Count > 0);
+            Assert.IsTrue(result.Any());
         }
 
         [TestMethod]
