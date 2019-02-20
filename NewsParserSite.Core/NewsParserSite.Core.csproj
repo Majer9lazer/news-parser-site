@@ -55,10 +55,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\SqlNewsRepository.cs" />
+    <Compile Include="Interfaces\ICommand.cs" />
     <Compile Include="Interfaces\INewsRepository.cs" />
     <Compile Include="Interfaces\IParser.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Implementation\Parser.cs" />
+    <Compile Include="Interfaces\ITransactionRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure.Interception;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using NewsParserSite.Core.Interfaces;
 using NewsParserSite.DATA.Entities;
 
 namespace NewsParserSite.Core.Implementation
 {
-    public class SqlNewsRepository : INewsRepository
+    public class SqlNewsRepository : INewsRepository, ITransactionRepository<News>
     {
         private readonly ParserSiteDb _db;
         private bool _disposed = false;
@@ -92,7 +95,7 @@ namespace NewsParserSite.Core.Implementation
             // превращаем в Dictionary чтобы выглядело как - "привет - 3"
 
             var result = bigText.Split(' ')
-                .Where(w => w.Length > 2&& !Regex.IsMatch(w, "[\r\n|\r|\n]"))
+                .Where(w => w.Length > 2 && !Regex.IsMatch(w, "[\r\n|\r|\n]"))
                 .GroupBy(g => g)
                 .OrderByDescending(d => d.Count())
                 .Take(10)
@@ -109,6 +112,109 @@ namespace NewsParserSite.Core.Implementation
         public void AddRange(List<News> list)
         {
             _db.News.AddRange(list);
+        }
+
+        public void TranAdd(News obj)
+        {
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    _db.News.Add(obj);
+                    _db.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    Debug.Assert(Task.CurrentId != null, "Task.CurrentId != null");
+                    EventLog.WriteEntry("Exception", e.ToString(), EventLogEntryType.Error, (int)Task.CurrentId);
+                    transaction.Rollback();
+                }
+            }
+        }
+
+
+        public void TranUpdate(News obj)
+        {
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    if (obj != null)
+                    {
+                        obj.DateOfPublish = obj.DateOfPublish;
+                        obj.Description = obj.Description;
+                        obj.Theme = obj.Theme;
+                        _db.Entry(obj).State = EntityState.Modified;
+                        _db.SaveChanges();
+                        transaction.Commit();
+                    }
+                    else
+                    {
+                        Debug.Assert(Task.CurrentId != null, "Task.CurrentId != null");
+                        EventLog.WriteEntry("WarningMessage", "News object in TranUpdate is empty", EventLogEntryType.Warning,
+                            (int)Task.CurrentId);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.Assert(Task.CurrentId != null, "Task.CurrentId != null");
+                    EventLog.WriteEntry("Exception", e.ToString(), EventLogEntryType.Error, (int)Task.CurrentId);
+                    transaction.Rollback();
+                }
+            }
+        }
+
+        public void TranUpdate(int id, News obj)
+        {
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var foundElement = _db.News.Find(id);
+                    if (foundElement != null)
+                    {
+                        foundElement.DateOfPublish = obj.DateOfPublish;
+                        foundElement.Description = obj.Description;
+                        foundElement.Theme = obj.Theme;
+                        _db.Entry(foundElement).State = EntityState.Modified;
+                        _db.SaveChanges();
+                        transaction.Commit();
+                    }
+                    else
+                    {
+                        Debug.Assert(Task.CurrentId != null, "Task.CurrentId != null");
+                        EventLog.WriteEntry("WarningMessage", "Cannot find by news by id", EventLogEntryType.Warning,
+                            (int)Task.CurrentId);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.Assert(Task.CurrentId != null, "Task.CurrentId != null");
+                    EventLog.WriteEntry("Exception", e.ToString(), EventLogEntryType.Error, (int)Task.CurrentId);
+                    transaction.Rollback();
+                }
+            }
+        }
+
+        public void TranDelete(News obj)
+        {
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    _db.News.Remove(obj);
+                    _db.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    Debug.Assert(Task.CurrentId != null, "Task.CurrentId != null");
+                    EventLog.WriteEntry("Exception", e.ToString(), EventLogEntryType.Error, (int)Task.CurrentId);
+                    transaction.Rollback();
+                }
+            }
         }
     }
 }
