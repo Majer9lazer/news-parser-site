@@ -21,7 +21,7 @@ namespace NewsParserSite.API.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("ParserDb", throwIfV1Schema: false)
+            : base("ParserSiteDb", throwIfV1Schema: false)
         {
         }
         

@@ -29,12 +29,15 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <button type="button" v-on:click="signIn" class="btn btn-primary">
                         Войти
                     </button>
                     <button type="button" v-on:click="logout" class="btn btn-primary">
                         Выйти
+                    </button>
+                    <button type="button" v-on:click="resetErrors" class="btn btn-primary">
+                        Сбросить ошибки
                     </button>
                 </div>
             </div>
@@ -61,7 +64,7 @@
 
 @section scripts{
     <script>
-        var formVue = new Vue({
+        var registerFormVue = new Vue({
             el: "#loginForm",
             data: {
                 userLogin: '',
@@ -71,11 +74,15 @@
                 messageInfo: null,
                 token: '',
                 tokenKey: 'tokenInfo',
-                waitingForProcess: false
+                waitingForProcess: false,
+                defaultMessage: 'Здесь будет информация о ваших текущих действиях.'
             },
             mounted: function () {
                 var token = sessionStorage.getItem(this.tokenKey);
-                this.messageInfo = 'Ваш токен = ' + token;
+                if (token === null)
+                    this.signIn();
+                else
+                    this.messageInfo = 'Ваш токен = ' + token;
             },
             methods: {
                 signIn: function () {
@@ -89,25 +96,36 @@
                             password: this.userPassword
                         }
                     }).done(function (resp) {
-                        formVue.messageInfo = 'Ваш токен = \n Bearer ' + resp.access_token;
+                        registerFormVue.messageInfo = 'Ваш токен = \n Bearer ' + resp.access_token;
 
-                        sessionStorage.setItem(formVue.tokenKey, 'Bearer ' + resp.access_token);
-                        formVue.token = 'Bearer ' + resp.access_token;
-                        formVue.alertClass = 'alert-success';
+                        sessionStorage.setItem(registerFormVue.tokenKey, 'Bearer ' + resp.access_token);
+                        registerFormVue.token = 'Bearer ' + resp.access_token;
+                        registerFormVue.alertClass = 'alert-success';
                         console.log(resp);
                     }).fail(function (data) {
-                        formVue.alertClass = 'alert-danger';
-                        formVue.messageInfo = data.statusText;
+                        registerFormVue.alertClass = 'alert-danger';
+                        registerFormVue.messageInfo = 'Response status = ' + data.statusText + '.\n' + 'error_description = ' + data.responseJSON.error_description;
                         console.log(data);
                     }).always(function () {
-                        formVue.waitingForProcess = false;
-
+                        registerFormVue.waitingForProcess = false;
                     });
                 },
                 logout: function () {
                     sessionStorage.removeItem(this.tokenKey);
                     this.token = null;
-                    this.messageInfo = 'Здесь будет информация о ваших текущих действиях.';
+                    this.messageInfo = this.defaultMessage;
+                },
+                resetErrors: function () {
+                    this.waitingForProcess = true;
+                    if (!this.errorExists) {
+                        alert('There is no any errors)');
+                    } else {
+                        this.errorExists = false;
+                        this.alertClass = 'alert-info';
+                        this.messageInfo = this.defaultMessage;
+                    }
+                    console.clear();
+                    this.waitingForProcess = false;
                 }
             }
         });
