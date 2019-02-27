@@ -2,11 +2,6 @@
     ViewBag.Title = "Login";
 }
 <div class="container" style="margin-top: 20px;" id="loginForm">
-
-    <div class="userInfo" style="display: none;">
-        <p>Вы вошли как: <span class="userName"></span></p>
-        <input type="button" value="Выйти" id="logOut" />
-    </div>
     <h3>Вход на сайт</h3>
     <hr />
     <div class="row">
@@ -79,7 +74,7 @@
             },
             mounted: function () {
                 var token = sessionStorage.getItem(this.tokenKey);
-                if (token === null)
+                if (token === null && (this.userLogin.length > 1 && this.userPassword > 1))
                     this.signIn();
                 else
                     this.messageInfo = 'Ваш токен = ' + token;
