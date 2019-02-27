@@ -348,6 +348,7 @@
     <Content Include="site_template\wp-content\themes\bootstrap-marketplace\assets\fonts\fontello\bootstrap-themesc000.ttf" />
     <Content Include="site_template\wp-content\themes\bootstrap-marketplace\assets\fonts\fontello\bootstrap-themesc000.woff" />
     <Content Include="site_template\wp-content\themes\bootstrap-marketplace\assets\fonts\fontello\bootstrap-themesc000.woff2" />
+    <Content Include="Views\Shared\_MaterialLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
