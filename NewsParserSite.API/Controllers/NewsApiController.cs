@@ -53,7 +53,11 @@ namespace NewsParserSite.API.Controllers
             _repository.Update(elem);
             _repository.Save();
         }
-
+        /// <summary>
+        /// Получение 10 самых используемых слов в новостях
+        /// доступно по адресу : "api/news/topten"
+        /// </summary>
+        /// <returns></returns>
         // api/news/topten
         [HttpGet]
         [Route("api/news/topten")]
