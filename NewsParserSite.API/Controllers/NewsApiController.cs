@@ -80,6 +80,12 @@ namespace NewsParserSite.API.Controllers
             return _repository.SearchByText(text);
         }
 
+        [HttpGet]
+        [Route("api/news/ping")]
+        public string Ping()
+        {
+            return "Pong";
+        }
         // DELETE api/<controller>/5
         public void Delete(int id)
         {

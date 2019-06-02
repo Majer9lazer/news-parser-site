@@ -62,7 +62,7 @@ namespace NewsParserSite.API
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
                 ClientId = "21898034664-b5k6tid4gh9krc42crjjt7vr8vtn64mt.apps.googleusercontent.com",
-                ClientSecret = "j4VZfHSYW1xuF3FBWqgQgHZP"
+                ClientSecret = ""
             });
         }
     }
